@@ -4,6 +4,7 @@
     <title>Meal List</title>
 </head>
 <body>
+<h2><a href="index.html">Home</a></h2>
 
 </body>
 </html>
