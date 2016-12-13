@@ -8,8 +8,8 @@
     <title>Meal List</title>
     <style>
         .style_regular{
-            background-color: white;
-            color: black;
+            background-color: greenyellow;
+            color: darkblue;
         }
         .style_exceed{
             background-color: red;
@@ -20,20 +20,20 @@
 <body>
 <jsp:useBean id="mealUtil" class="ru.javawebinar.topjava.util.MealsUtil"/>
 <h2><a href="index.html">Home</a></h2>
-<table width="450px;">
+<table style="border: 1px; width: 450px;">
     <tr>
-        <th>Дата</th>
-        <th>Время</th>
-        <th>Описание</th>
-        <th>Калории</th>
+        <th><c:out value="Дата"/></th>
+        <th><c:out value="Время"/></th>
+        <th><c:out value="Описание"/></th>
+        <th><c:out value="Калории"/></th>
     </tr>
-    <c:forEach items="${mealUtil.getFilteredWithExceeded(meals, startTime, endTime, caloriesPerDay)}" var="mealItem" varStatus="st">
+    <c:forEach items="${mealUtil.getWithExceeded(meals, calories)}" var="mealItem" varStatus="st">
     <jsp:useBean id="mealItem" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
     <tr class="${mealItem.exceed ? 'style_exceed' : 'style_regular'}">
-        <td>${mealItem.date}</td>
-        <td>${mealItem.time}</td>
-        <td>${mealItem.description}</td>
-        <td>${mealItem.calories}</td>
+        <td><c:out value="${mealItem.date}"/></td>
+        <td><c:out value="${mealItem.time}"/></td>
+        <td><c:out value="${mealItem.description}"/></td>
+        <td><c:out value="${mealItem.calories}"/></td>
     </tr>
     </c:forEach>
 

@@ -25,13 +25,10 @@ public class MealServlet extends HttpServlet {
         LOG.debug("forward to mealList");
         request.setCharacterEncoding("UTF-8");
         List<Meal> meals = MealsUtil.createlistMeal();
-        LocalTime startTime = LocalTime.of(7,0);
-        LocalTime endTime = LocalTime.of(10,0);
-        final int calories = 1000;
+
+        final int calories = 2000;
         HttpSession session = request.getSession();
         session.setAttribute("meals", meals);
-        session.setAttribute("startTime", startTime);
-        session.setAttribute("endTime", endTime);
         session.setAttribute("calories", calories);
         request.getRequestDispatcher("/mealList.jsp").forward(request, response);
     }
