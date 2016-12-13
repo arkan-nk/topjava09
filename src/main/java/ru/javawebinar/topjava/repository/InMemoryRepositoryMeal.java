@@ -38,7 +38,7 @@ public class InMemoryRepositoryMeal implements RepositoryMealIf{
     @Override
     public Map<Integer, Meal> getMeals() {
         Map<Integer, Meal> snapshot = new HashMap<>();
-        snapshot.putAll(store);
+        if (!store.isEmpty()) snapshot.putAll(store);
         return snapshot;
     }
 
