@@ -43,6 +43,6 @@ public class InMemoryRepositoryMeal implements RepositoryMealIf{
     }
 
     private int generateId(){
-        return (new AtomicInteger(store.size())).getAndIncrement();
+        return (new AtomicInteger(store.size())).get();
     }
 }
