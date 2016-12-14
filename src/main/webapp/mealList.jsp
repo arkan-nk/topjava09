@@ -11,12 +11,18 @@
 <body>
 <h2><a href="index.html">Home</a></h2>
 <jsp:useBean id="mealUtil" class="ru.javawebinar.topjava.util.MealsUtil"/>
-<table style="border: 1px; width: 450px;">
+<table style="width: 850px;">
     <tr>
         <th><c:out value="Дата"/></th>
         <th><c:out value="Время"/></th>
         <th><c:out value="Описание"/></th>
         <th><c:out value="Калории"/></th>
+        <th>
+            <a href="meals?action=add&id=-1">
+                <c:out value="Создать новую запись"/>
+            </a>
+        </th>
+        <th></th>
     </tr>
     <c:forEach items="${mealUtil.getWithExceeded(meals, calories)}" var="mealItem" varStatus="st">
     <jsp:useBean id="mealItem" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
@@ -25,8 +31,16 @@
         <td><c:out value="${mealItem.time}"/></td>
         <td><c:out value="${mealItem.description}"/></td>
         <td><c:out value="${mealItem.calories}"/></td>
-        <td><c:out value="to_editAction"/></td>
-        <td><c:out value="to_deleteAction"/></td>
+        <td>
+            <a href="meals?action=edit&id=${mealItem.id}">
+                <c:out value="Изменить"/>
+            </a>
+        </td>
+        <td>
+            <a href="meals?action=del&id=${mealItem.id}">
+                <c:out value="Удалить"/>
+            </a>
+        </td>
     </tr>
     </c:forEach>
 
