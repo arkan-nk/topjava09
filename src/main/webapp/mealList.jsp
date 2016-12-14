@@ -6,20 +6,11 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Meal List</title>
-    <style>
-        .style_regular{
-            background-color: greenyellow;
-            color: darkblue;
-        }
-        .style_exceed{
-            background-color: red;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="resources/css/style.css"/>
 </head>
 <body>
-<jsp:useBean id="mealUtil" class="ru.javawebinar.topjava.util.MealsUtil"/>
 <h2><a href="index.html">Home</a></h2>
+<jsp:useBean id="mealUtil" class="ru.javawebinar.topjava.util.MealsUtil"/>
 <table style="border: 1px; width: 450px;">
     <tr>
         <th><c:out value="Дата"/></th>
@@ -34,6 +25,8 @@
         <td><c:out value="${mealItem.time}"/></td>
         <td><c:out value="${mealItem.description}"/></td>
         <td><c:out value="${mealItem.calories}"/></td>
+        <td><c:out value="to_editAction"/></td>
+        <td><c:out value="to_deleteAction"/></td>
     </tr>
     </c:forEach>
 
