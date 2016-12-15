@@ -12,7 +12,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by arkan on 13.12.2016.
  */
 public class InMemoryRepositoryMeal implements RepositoryMealIf{
-    private static ConcurrentMap<Integer, Meal> store = new ConcurrentHashMap<>();
+    private ConcurrentMap<Integer, Meal> store = new ConcurrentHashMap<>();
+    private AtomicInteger sequenceId=new AtomicInteger(0);
     @Override
     public Meal get(Integer key) {
         return store.getOrDefault(key, null);
@@ -26,7 +27,7 @@ public class InMemoryRepositoryMeal implements RepositoryMealIf{
     @Override
     public Meal putAndGetNew(Meal meal) {
         if (meal.getId()==null) {
-            final int generatedID = this.generateId();
+            final int generatedID = sequenceId.getAndIncrement();
             Meal meal1 = new Meal(generatedID, meal.getDateTime(), meal.getDescription(), meal.getCalories());
             store.put(generatedID, meal1);
             return meal1;
@@ -40,9 +41,5 @@ public class InMemoryRepositoryMeal implements RepositoryMealIf{
         Map<Integer, Meal> snapshot = new HashMap<>();
         if (!store.isEmpty()) snapshot.putAll(store);
         return snapshot;
-    }
-
-    private int generateId(){
-        return (new AtomicInteger(store.size())).get();
     }
 }
