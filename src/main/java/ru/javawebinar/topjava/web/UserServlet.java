@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+
 /**
  * User: gkislin
  * Date: 19.08.2014
@@ -18,9 +19,9 @@ public class UserServlet extends HttpServlet {
     private static final Logger LOG = getLogger(UserServlet.class);
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.debug("redirect to userList");
+        LOG.debug("redirect to users");
 
-//        request.getRequestDispatcher("/userList.jsp").forward(request, response);
-        response.sendRedirect("userList.jsp");
+//        request.getRequestDispatcher("/users.jsp").forward(request, response);
+        response.sendRedirect("users.jsp");
     }
 }
