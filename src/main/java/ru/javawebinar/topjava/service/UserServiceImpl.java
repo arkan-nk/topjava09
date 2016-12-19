@@ -6,7 +6,9 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFound;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
@@ -38,16 +40,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getByEmail(String email) throws NotFoundException {
+        Objects.requireNonNull(email);
         return checkNotFound(repository.getByEmail(email), "email=" + email);
     }
 
     @Override
     public List<User> getAll() {
-        return repository.getAll();
+        return repository.getAll().size()<1 ? Collections.emptyList() : repository.getAll();
     }
 
     @Override
-    public void update(User user) {
+    public void update(User user) throws NotFoundException{
         repository.save(user);
     }
 }
