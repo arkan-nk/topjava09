@@ -14,12 +14,51 @@
             color: red;
         }
     </style>
+    <meta charset="UTF-8"/>
 </head>
 <body>
 <section>
     <h2><a href="index.html">Home</a></h2>
+
     <h2>Meal list</h2>
-    <a href="meals?action=create">Add Meal</a>
+    <form method="post">
+    <jsp:useBean id="mealDate" type="ru.javawebinar.topjava.web.MealDate" scope="session" />
+    <table style="border:none;">
+        <tr>
+            <td><a href="meals?action=create">Add Meal</a></td>
+            <td>
+                <c:out value="Дата начала"/>
+            </td>
+            <td>
+                <c:out value="Дата конца"/>
+            </td>
+            <td>
+                <c:out value="Время начала"/>
+            </td>
+            <td>
+                <c:out value="Время конца"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <c:out value="Дата/время"/>
+            </td>
+            <td>
+                <input type="date-local" value="${mealDate.startDate}" name="date1">
+            </td>
+            <td>
+                <input type="time-local" value="${mealDate.startTime}" name="date2">
+            </td>
+            <td>
+                <input type="date-local" value="${mealDate.endDate}" name="date1">
+            </td>
+            <td>
+                <input type="time-local" value="${mealDate.endTime}" name="date2">
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="Применить фильтр"/>
+    </form>
     <hr>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
@@ -46,6 +85,7 @@
             </tr>
         </c:forEach>
     </table>
+
 </section>
 </body>
 </html>

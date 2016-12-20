@@ -43,18 +43,26 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        MealRestController mealRestController = appCtx.getBean(MealRestController.class);
         request.setCharacterEncoding("UTF-8");
-        String id = request.getParameter("id");
-        Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
-                AuthorizedUser.id(),
-                LocalDateTime.parse(request.getParameter("dateTime")),
-                request.getParameter("description"),
-                Integer.valueOf(request.getParameter("calories")));
-
-        LOG.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        mealRestController.save(meal);
+        String action = request.getParameter("action");
+        MealDate mealDate = (MealDate) request.getSession().getAttribute("mealDate");
+        if (mealDate==null) {
+            mealDate = new MealDate();
+            request.getSession().setAttribute("mealDate", mealDate);
+        }
+        MealRestController mealRestController = appCtx.getBean(MealRestController.class);
         User user = (User) request.getSession().getAttribute("authorizedUser");
+        if (action!=null &&(action.equals("create") || action.equals("update"))){
+            String id = request.getParameter("id");
+            Meal meal = new Meal((id == null || id.isEmpty()) ? null : Integer.valueOf(id),
+                    AuthorizedUser.id(),
+                    LocalDateTime.parse(request.getParameter("dateTime")),
+                    request.getParameter("description"),
+                    Integer.valueOf(request.getParameter("calories")));
+
+            LOG.info(meal.isNew() ? "Create {}" : "Update {}", meal);
+            mealRestController.save(meal);
+        }
         forwardToMealList(mealRestController,user, request, response);
     }
 
@@ -87,7 +95,12 @@ public class MealServlet extends HttpServlet {
     private void forwardToMealList(MealRestController mealRestController, User user,
                           HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {
-        List<MealWithExceed> mealsWE = mealRestController.getAll(user, LocalDateTime.MIN, LocalDateTime.MAX);
+        MealDate mealDate = (MealDate) request.getSession().getAttribute("mealDate");
+        if (mealDate==null) {
+            mealDate = new MealDate();
+            request.getSession().setAttribute("mealDate", mealDate);
+        }
+        List<MealWithExceed> mealsWE = mealRestController.getAll(user, mealDate.getStartDateTime(), mealDate.getEndDateTime());
         request.setAttribute("meals", mealsWE);
         request.getRequestDispatcher("/meals.jsp").forward(request, response);
     }

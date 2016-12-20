@@ -4,11 +4,13 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * User: gkislin
@@ -23,7 +25,7 @@ public class SpringMain {
             final User user = new User(1, "userName", "email", "password", Role.ROLE_ADMIN);
             adminUserController.create(user);
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-            mealRestController.getAll(user, LocalDateTime.MIN, LocalDateTime.MAX);
+            List<MealWithExceed> list = mealRestController.getAll(user, LocalDateTime.MIN, LocalDateTime.MAX);
         }
     }
 }
