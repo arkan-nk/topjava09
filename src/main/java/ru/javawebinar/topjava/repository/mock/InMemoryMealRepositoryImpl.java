@@ -42,7 +42,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id) {
-        return repository.get(id);
+        return repository.getOrDefault(id, null);
     }
 
     @Override

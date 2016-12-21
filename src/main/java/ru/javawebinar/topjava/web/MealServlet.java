@@ -46,8 +46,8 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        MealRestController mealRestController = appCtx.getBean(MealRestController.class);
         User user = (User) request.getSession().getAttribute("authorizedUser");
+        MealRestController mealRestController = appCtx.getBean(MealRestController.class);
         String dateTimeStr = (String) request.getParameter("dateTime");
         String description = (String) request.getParameter("description");
         String caloriesStr = (String) request.getParameter("calories");
@@ -85,6 +85,8 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
+        String userStr = request.getParameter("userId");
+        if (userStr!=null && !userStr.isEmpty()) AuthorizedUser.setId(Integer.decode(userStr));
         User user = new User();
         user.setId(AuthorizedUser.id());
         user.setCaloriesPerDay(AuthorizedUser.getCaloriesPerDay());
