@@ -17,7 +17,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
@@ -44,24 +46,38 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String action = request.getParameter("action");
-        MealDate mealDate = (MealDate) request.getSession().getAttribute("mealDate");
-        if (mealDate==null) {
-            mealDate = new MealDate();
-            request.getSession().setAttribute("mealDate", mealDate);
-        }
         MealRestController mealRestController = appCtx.getBean(MealRestController.class);
         User user = (User) request.getSession().getAttribute("authorizedUser");
-        if (action!=null &&(action.equals("create") || action.equals("update"))){
-            String id = request.getParameter("id");
-            Meal meal = new Meal((id == null || id.isEmpty()) ? null : Integer.valueOf(id),
-                    AuthorizedUser.id(),
-                    LocalDateTime.parse(request.getParameter("dateTime")),
-                    request.getParameter("description"),
-                    Integer.valueOf(request.getParameter("calories")));
-
-            LOG.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-            mealRestController.save(meal);
+        String dateTimeStr = (String) request.getParameter("dateTime");
+        String description = (String) request.getParameter("description");
+        String caloriesStr = (String) request.getParameter("calories");
+        if (dateTimeStr!=null && !dateTimeStr.isEmpty() && description!=null && caloriesStr!=null) {
+            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr);
+            Integer calories = Integer.valueOf(caloriesStr);
+            Meal mealOld = (Meal) request.getSession().getAttribute("meal");
+            Meal mealNew = new Meal(mealOld.getId(), user.getId(), dateTime, description, calories);
+            LOG.info(mealNew.isNew() ? "Create {}" : "Update {}", mealNew);
+            mealRestController.save(mealNew);
+            request.getSession().removeAttribute("meal");
+            forwardToMealList(mealRestController,user, request, response);
+        }else {
+            MealDate mealDate = (MealDate) request.getSession().getAttribute("mealDate");
+            if (mealDate==null) {
+                mealDate = new MealDate();
+                request.getSession().setAttribute("mealDate", mealDate);
+            }
+            mealDate.setStartDate(null);
+            mealDate.setEndDate(null);
+            mealDate.setStartTime(null);
+            mealDate.setEndTime(null);
+            String dateStr1 = (String) request.getParameter("date1");
+            String dateStr2 = (String) request.getParameter("date2");
+            String timeStr1 = (String) request.getParameter("time1");
+            String timeStr2 = (String) request.getParameter("time2");
+            if (dateStr1!=null && !dateStr1.isEmpty()) mealDate.setStartDate(LocalDate.parse(dateStr1));
+            if (dateStr2!=null && !dateStr2.isEmpty()) mealDate.setEndDate(LocalDate.parse(dateStr2));
+            if (timeStr1!=null && !timeStr1.isEmpty()) mealDate.setStartTime(LocalTime.parse(timeStr1));
+            if (timeStr2!=null && !timeStr2.isEmpty()) mealDate.setEndTime(LocalTime.parse(timeStr2));
         }
         forwardToMealList(mealRestController,user, request, response);
     }
@@ -87,7 +103,7 @@ public class MealServlet extends HttpServlet {
             final Meal meal = action.equals("create") ?
                     new Meal(user.getId(), LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", user.getCaloriesPerDay()) :
                     mealRestController.get(getId(request));
-            request.setAttribute("meal", meal);
+            request.getSession().setAttribute("meal", meal);
             request.getRequestDispatcher("meal.jsp").forward(request, response);
         }
     }
