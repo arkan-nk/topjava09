@@ -58,7 +58,7 @@ public class MealServlet extends HttpServlet {
             Meal mealNew = new Meal(mealOld.getId(), user.getId(), dateTime, description, calories);
             LOG.info(mealNew.isNew() ? "Create {}" : "Update {}", mealNew);
             mealRestController.save(mealNew);
-            request.getSession().removeAttribute("meal");
+            request.getSession().removeAttribute("mealNew");
             forwardToMealList(mealRestController,user, request, response);
         }else {
             MealDate mealDate = (MealDate) request.getSession().getAttribute("mealDate");
@@ -103,7 +103,7 @@ public class MealServlet extends HttpServlet {
             final Meal meal = action.equals("create") ?
                     new Meal(user.getId(), LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", user.getCaloriesPerDay()) :
                     mealRestController.get(getId(request));
-            request.getSession().setAttribute("meal", meal);
+            request.getSession().setAttribute("mealNew", meal);
             request.getRequestDispatcher("meal.jsp").forward(request, response);
         }
     }
