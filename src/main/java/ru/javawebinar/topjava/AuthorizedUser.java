@@ -1,14 +1,15 @@
 package ru.javawebinar.topjava;
 
-import ru.javawebinar.topjava.model.BaseEntity;
 import ru.javawebinar.topjava.util.MealsUtil;
+
+import static ru.javawebinar.topjava.util.STARTID.USER_ID;
 
 /**
  * GKislin
  * 06.03.2015.
  */
 public class AuthorizedUser {
-    public static int id = BaseEntity.START_SEQ;
+    public static int id = USER_ID.getVal();
 
     public static int id() {
         return id;

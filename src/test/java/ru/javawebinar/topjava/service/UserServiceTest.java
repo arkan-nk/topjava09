@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import static ru.javawebinar.topjava.UserTestData.*;
+import static ru.javawebinar.topjava.util.STARTID.USER_ID;
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
@@ -41,7 +42,7 @@ public class UserServiceTest {
         User newUser = new User(null, "New", "new@gmail.com", "newPass", 1555, false, Collections.singleton(Role.ROLE_USER));
         User created = service.save(newUser);
         newUser.setId(created.getId());
-        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, newUser, USER), service.getAll());
+        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN_ETALON, newUser, USER_ETALON), service.getAll());
     }
 
     @Test(expected = DataAccessException.class)
@@ -51,8 +52,8 @@ public class UserServiceTest {
 
     @Test
     public void testDelete() throws Exception {
-        service.delete(USER_ID);
-        MATCHER.assertCollectionEquals(Collections.singletonList(ADMIN), service.getAll());
+        service.delete(USER_ID.getVal());
+        MATCHER.assertCollectionEquals(Collections.singletonList(ADMIN_ETALON), service.getAll());
     }
 
     @Test(expected = NotFoundException.class)
@@ -62,8 +63,8 @@ public class UserServiceTest {
 
     @Test
     public void testGet() throws Exception {
-        User user = service.get(USER_ID);
-        MATCHER.assertEquals(USER, user);
+        User user = service.get(USER_ID.getVal());
+        MATCHER.assertEquals(USER_ETALON, user);
     }
 
     @Test(expected = NotFoundException.class)
@@ -74,21 +75,21 @@ public class UserServiceTest {
     @Test
     public void testGetByEmail() throws Exception {
         User user = service.getByEmail("user@yandex.ru");
-        MATCHER.assertEquals(USER, user);
+        MATCHER.assertEquals(USER_ETALON, user);
     }
 
     @Test
     public void testGetAll() throws Exception {
         Collection<User> all = service.getAll();
-        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN, USER), all);
+        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN_ETALON, USER_ETALON), all);
     }
 
     @Test
     public void testUpdate() throws Exception {
-        User updated = new User(USER);
+        User updated = new User(USER_ETALON);
         updated.setName("UpdatedName");
         updated.setCaloriesPerDay(330);
         service.update(updated);
-        MATCHER.assertEquals(updated, service.get(USER_ID));
+        MATCHER.assertEquals(updated, service.get(USER_ID.getVal()));
     }
 }

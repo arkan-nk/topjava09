@@ -12,6 +12,8 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
+import static ru.javawebinar.topjava.UserTestData.USER_TEST;
+
 /**
  * User: gkislin
  * Date: 22.08.2014
@@ -19,10 +21,10 @@ import java.util.List;
 public class SpringMain {
     public static void main(String[] args) {
         // java 7 Automatic resource management
-        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
+        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-test.xml")) {
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
-            adminUserController.create(UserTestData.USER);
+            adminUserController.create(USER_TEST);
             System.out.println();
 
             MealRestController mealController = appCtx.getBean(MealRestController.class);

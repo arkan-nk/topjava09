@@ -16,6 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static ru.javawebinar.topjava.util.STARTID.USER_ID;
+
 /**
  * GKislin
  * 15.06.2015.
@@ -25,7 +27,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     private static final Logger LOG = LoggerFactory.getLogger(InMemoryUserRepositoryImpl.class);
 
     private Map<Integer, User> repository = new ConcurrentHashMap<>();
-    private AtomicInteger counter = new AtomicInteger(0);
+    private AtomicInteger counter = new AtomicInteger(USER_ID.getVal());
 
     private static final Comparator<User> USER_COMPARATOR = Comparator.comparing(User::getName).thenComparing(User::getEmail);
 
@@ -33,7 +35,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     public User save(User user) {
         Objects.requireNonNull(user);
         if (user.isNew()) {
-            user.setId(counter.incrementAndGet());
+            user.setId(counter.getAndIncrement());
         }
         repository.put(user.getId(), user);
         return user;
