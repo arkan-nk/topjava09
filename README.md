@@ -1,4 +1,4 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e8d9ae7c760948069904c2f0320da001)](https://www.codacy.com/app/arkan-nk/topjava09?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=arkan-nk/topjava09&amp;utm_campaign=Badge_Grade) https://travis-ci.org/arkan-nk/topjava09
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e8d9ae7c760948069904c2f0320da001)](https://www.codacy.com/app/arkan-nk/topjava09?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=arkan-nk/topjava09&amp;utm_campaign=Badge_Grade) https://travis-ci.org/arkan-nk/topjava09.svg?branch=master
 
 Java Enterprise Online Project 
 ===============================
