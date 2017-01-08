@@ -38,7 +38,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
                     .withTableName("meals").usingGeneratedKeyColumns("id");
             MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource()
                     .addValue("id", meal.getId())
-                    .addValue("datetime", meal.getDateTime())
+                    .addValue("date_time", meal.getDateTime())
                     .addValue("user_id", userId)
                     .addValue("description", meal.getDescription())
                     .addValue("calories", meal.getCalories());
@@ -46,7 +46,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
             meal.setId(key.intValue());
             updateResult=1;
         }else {
-            updateResult = jdbcTemplate.update("UPDATE meals SET datetime=?, description=?, calories=? WHERE id=? AND user_id=?",
+            updateResult = jdbcTemplate.update("UPDATE meals SET date_time=?, description=?, calories=? WHERE id=? AND user_id=?",
                     saveStmt -> {
                         saveStmt.setTimestamp(1, Timestamp.valueOf(meal.getDateTime()));
                         saveStmt.setString(2, meal.getDescription());
@@ -84,9 +84,9 @@ public class JdbcMealRepositoryImpl implements MealRepository {
     }
     private List<Meal> getResultMeals(Integer id, Integer userId, LocalDateTime startDate, LocalDateTime endDate){
         return jdbcTemplate.query(
-                "SELECT id, datetime, description, calories FROM meals " +
+                "SELECT id, date_time, description, calories FROM meals " +
                         "WHERE id=COALESCE(?, id) AND user_id=COALESCE(?, user_id) " +
-                          "AND datetime BETWEEN ? AND ? ORDER BY user_id, datetime DESC",
+                          "AND date_time BETWEEN ? AND ? ORDER BY user_id, date_time DESC",
                 selectStmt->{
                      if(id!=null) {
                          selectStmt.setInt(1, id);
