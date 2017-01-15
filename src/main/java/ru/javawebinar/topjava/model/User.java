@@ -1,9 +1,10 @@
 package ru.javawebinar.topjava.model;
 
+import ru.javawebinar.topjava.util.MealsUtil;
+
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
-import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
