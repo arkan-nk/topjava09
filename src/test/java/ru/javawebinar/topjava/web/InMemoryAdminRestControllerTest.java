@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import org.junit.*;
+import org.junit.rules.ExternalResource;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.UserTestData;
@@ -19,20 +20,41 @@ public class InMemoryAdminRestControllerTest {
     private static ConfigurableApplicationContext appCtx;
     private static AdminRestController controller;
 
-    @BeforeClass
-    public static void beforeClass() {
+    private static void beforeClass() {
         appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/mock.xml");
         System.out.println("\n" + Arrays.toString(appCtx.getBeanDefinitionNames()) + "\n");
         controller = appCtx.getBean(AdminRestController.class);
     }
-
-    @AfterClass
-    public static void afterClass() {
+    private static void afterClass() {
         appCtx.close();
     }
 
-    @Before
-    public void setUp() throws Exception {
+    @ClassRule
+    public static ExternalResource externalResource1 = new ExternalResource() {
+        @Override
+        protected void before() throws Throwable {
+            beforeClass();
+            super.before();
+        }
+
+        @Override
+        protected void after() {
+            afterClass();
+            super.after();
+        }
+    };
+
+    @Rule
+    public ExternalResource externalResource2 = new ExternalResource() {
+        @Override
+        protected void before() throws Throwable {
+            setUp();
+            super.before();
+        }
+    };
+
+
+    private void setUp() throws Exception {
         // Re-initialize
         UserRepository repository = appCtx.getBean(UserRepository.class);
         repository.getAll().forEach(u -> repository.delete(u.getId()));

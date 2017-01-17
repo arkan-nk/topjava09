@@ -2,7 +2,9 @@ package ru.javawebinar.topjava.web;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -32,8 +34,17 @@ public class InMemoryAdminRestControllerSpringTest {
     @Autowired
     private UserRepository repository;
 
-    @Before
-    public void setUp() throws Exception {
+
+    @Rule
+    public ExternalResource externalResource = new ExternalResource() {
+        @Override
+        protected void before() throws Throwable {
+            setUp();
+            super.before();
+        }
+    };
+
+    private void setUp() throws Exception {
         repository.getAll().forEach(u -> repository.delete(u.getId()));
         repository.save(USER);
         repository.save(ADMIN);
