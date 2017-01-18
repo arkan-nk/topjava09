@@ -2,7 +2,8 @@ package ru.javawebinar.topjava.service;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExternalResource;
+import org.junit.rules.TestRule;
+import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -15,6 +16,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
@@ -25,20 +27,14 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
         "classpath:spring/spring-db.xml"
 })
 @RunWith(SpringJUnit4ClassRunner.class)
-// @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
     @Autowired
     private MealService service;
 
     @Rule
-    public ExternalResource externalResource = new ExternalResource() {
-        @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-        @Override
-        protected void before() throws Throwable {
-            super.before();
-        }
-    };
+    public TestRule timeoutRule = new Timeout(10, TimeUnit.SECONDS);
 
     @Test
     public void testDelete() throws Exception {
