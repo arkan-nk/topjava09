@@ -7,8 +7,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 
-import java.sql.Timestamp;
-import java.util.Collection;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * gkislin
@@ -31,13 +31,13 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Modifying
     Meal save(Meal meal);
 
+    @Query(name=Meal.ALL_SORTED)
+    List<Meal> getAll(@Param("userId") Integer userId);
 
-    @Query(Meal.ALL_SORTED)
-    Collection<Meal> getAll(@Param("userId") int userId);
+    @Query(name=Meal.GET_BETWEEN)
+    List<Meal> getBetween(@Param("userId") Integer userId,
+                          @Param("startDate") LocalDateTime startDate,
+                          @Param("endDate") LocalDateTime endDate);
 
 
-    @Query(Meal.GET_BETWEEN)
-    Collection<Meal> getBetween(@Param("startDate") Timestamp startDate,
-                                        @Param("endDate") Timestamp endDate,
-                                        @Param("userId") int userId);
 }
