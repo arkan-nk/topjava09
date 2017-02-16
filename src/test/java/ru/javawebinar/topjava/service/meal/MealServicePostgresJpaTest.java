@@ -15,5 +15,5 @@ import ru.javawebinar.topjava.Profiles;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles(value={Profiles.POSTGRES, Profiles.JPA})
-public class MealServicePostgresJpa extends MealServiceTest{
+public class MealServicePostgresJpaTest extends MealServiceTest{
 }

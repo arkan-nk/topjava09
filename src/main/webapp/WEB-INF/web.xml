@@ -24,5 +24,8 @@
         <servlet-name>mealServlet</servlet-name>
         <url-pattern>/meals</url-pattern>
     </servlet-mapping>
-
+    <context-param>
+        <param-name>spring.profiles.active</param-name>
+        <param-value>postgres,jpa</param-value>
+    </context-param>
 </web-app>

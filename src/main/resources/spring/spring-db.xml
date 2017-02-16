@@ -15,34 +15,17 @@
     <context:property-placeholder location="classpath:db/common.properties"
                                   system-properties-mode="OVERRIDE" ignore-unresolvable="true"
                                   order="0"/>
-    <beans profile="hsqldb, postgres">
-        <bean id="dataSource"
-              class="${datasource.class}"
-              p:driverClassName="${jdbc.driver}"
-              p:url="${database.url}"
-              p:username="${database.username}"
-              p:password="${database.password}"/>
-        <jdbc:initialize-database data-source="dataSource" enabled="true">
-            <jdbc:script location="classpath:db/${jdbc.initLocation}"/>
-            <jdbc:script encoding="utf-8" location="classpath:db/populateDB.sql"/>
-        </jdbc:initialize-database>
-    </beans>
-    <beans profile="hsqldb">
-        <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE" order="1"/>
-    </beans>
-    <beans profile="postgres">
-        <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE" order="1" />
-    </beans>
+    <bean id="dataSource"
+          class="${datasource.class}"
+          p:driverClassName="${jdbc.driver}"
+          p:url="${database.url}"
+          p:username="${database.username}"
+          p:password="${database.password}"/>
+    <jdbc:initialize-database data-source="dataSource" enabled="true">
+        <jdbc:script location="classpath:db/${jdbc.initLocation}"/>
+        <jdbc:script encoding="utf-8" location="classpath:db/populateDB.sql"/>
+    </jdbc:initialize-database>
 
-    <beans profile="jdbc">
-        <context:component-scan base-package="ru.javawebinar.**.repository.jdbc"/>
-        <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-            <constructor-arg ref="dataSource"/>
-        </bean>
-        <bean id="namedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
-            <constructor-arg ref="dataSource"/>
-        </bean>
-    </beans>
     <beans profile="jpa,datajpa">
         <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
               p:dataSource-ref="dataSource"
@@ -65,6 +48,16 @@
         <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
               p:entityManagerFactory-ref="entityManagerFactory"/>
     </beans>
+
+    <beans profile="jdbc">
+        <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+            <constructor-arg ref="dataSource"/>
+        </bean>
+        <bean id="namedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+            <constructor-arg ref="dataSource"/>
+        </bean>
+        <context:component-scan base-package="ru.javawebinar.**.repository.jdbc"/>
+    </beans>
     <beans profile="jpa">
         <context:component-scan base-package="ru.javawebinar.**.repository.jpa" />
     </beans>
@@ -75,4 +68,10 @@
         <context:component-scan base-package="ru.javawebinar.**.repository.datajpa"/>
     </beans>
 
+    <beans profile="hsqldb">
+        <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE" order="1"/>
+    </beans>
+    <beans profile="postgres">
+        <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE" order="1" />
+    </beans>
 </beans>
