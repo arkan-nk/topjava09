@@ -14,13 +14,14 @@
 
     <context:property-placeholder location="classpath:db/common.properties"
                                   system-properties-mode="OVERRIDE" ignore-unresolvable="true"
-                                  order="0"/>
+                                  order="1"/>
     <bean id="dataSource"
           class="${datasource.class}"
           p:driverClassName="${jdbc.driver}"
           p:url="${database.url}"
           p:username="${database.username}"
           p:password="${database.password}"/>
+
     <jdbc:initialize-database data-source="dataSource" enabled="true">
         <jdbc:script location="classpath:db/${jdbc.initLocation}"/>
         <jdbc:script encoding="utf-8" location="classpath:db/populateDB.sql"/>
@@ -69,9 +70,9 @@
     </beans>
 
     <beans profile="hsqldb">
-        <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE" order="1"/>
+        <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE" order="0"/>
     </beans>
     <beans profile="postgres">
-        <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE" order="1" />
+        <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE" order="0" />
     </beans>
 </beans>
