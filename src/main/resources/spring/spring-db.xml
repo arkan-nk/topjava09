@@ -14,7 +14,7 @@
 
     <context:property-placeholder location="classpath:db/common.properties"
                                   system-properties-mode="OVERRIDE" ignore-unresolvable="true"
-                                  order="1"/>
+                                  order="0"/>
     <bean id="dataSource"
           class="${datasource.class}"
           p:driverClassName="${jdbc.driver}"
@@ -70,9 +70,9 @@
     </beans>
 
     <beans profile="hsqldb">
-        <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE" order="0"/>
+        <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE" order="1"/>
     </beans>
     <beans profile="postgres">
-        <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE" order="0" />
+        <context:property-placeholder location="classpath:db/postgres.properties" system-properties-mode="OVERRIDE" order="1" />
     </beans>
 </beans>

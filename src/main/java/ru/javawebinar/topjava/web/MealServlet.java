@@ -2,7 +2,8 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
@@ -26,25 +27,23 @@ import java.util.Objects;
 public class MealServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(MealServlet.class);
 
-    private GenericXmlApplicationContext springContext;
+    private WebApplicationContext springContext;
     private MealRestController mealController;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        String activeProfiles = getServletContext().getInitParameter("spring.profiles.active");
         if (springContext==null) {
-            springContext = new GenericXmlApplicationContext();
-            springContext.getEnvironment().setActiveProfiles(activeProfiles);
-            springContext.refresh();
-            springContext.load("spring/spring-app.xml", "spring/spring-db.xml");
+            ContextLoader cl = new ContextLoader();
+            springContext = cl.initWebApplicationContext(config.getServletContext());
         }
         mealController = springContext.getBean(MealRestController.class);
     }
 
     @Override
     public void destroy() {
-        springContext.close();
+        ContextLoader cl = new ContextLoader(springContext);
+        cl.closeWebApplicationContext(super.getServletContext());
         super.destroy();
     }
 
