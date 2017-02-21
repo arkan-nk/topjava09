@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.Assert;
 import ru.javawebinar.topjava.model.User;
@@ -19,14 +20,14 @@ public abstract class UserServiceCommon implements UserService {
 
     protected UserRepository repository;
 
-    @CacheEvict(value = "users", allEntries = true)
+    @CachePut(value = "users")
     @Override
     public User save(User user) {
         Assert.notNull(user, "user must not be null");
         return repository.save(user);
     }
 
-    @CacheEvict(value = "users", allEntries = true)
+    @CacheEvict(value = "users")
     @Override
     public void delete(int id) {
         checkNotFoundWithId(repository.delete(id), id);
@@ -49,7 +50,7 @@ public abstract class UserServiceCommon implements UserService {
         return repository.getAll();
     }
 
-    @CacheEvict(value = "users", allEntries = true)
+    @CachePut(value = "users")
     @Override
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
