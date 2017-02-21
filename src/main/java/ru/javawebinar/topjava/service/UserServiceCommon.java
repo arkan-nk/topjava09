@@ -55,7 +55,7 @@ public abstract class UserServiceCommon implements UserService {
         Assert.notNull(user, "user must not be null");
         repository.save(user);
     }
-
+    @CacheEvict(value = "users", allEntries = true)
     @Override
     public void evictCache() {
     }
