@@ -41,7 +41,8 @@ public abstract class UserServiceCommon implements UserService {
     @Override
     public User getByEmail(String email) throws NotFoundException {
         Assert.notNull(email, "email must not be null");
-        return checkNotFound(repository.getByEmail(email), "email=" + email);
+        //return checkNotFound(repository.getByEmail(email), "email=" + email);
+        return checkNotFound(this.getAll().stream().filter(usr->email.equals(usr.getEmail())).findFirst().orElse(null), "email=" + email);
     }
 
     @Cacheable("users")
