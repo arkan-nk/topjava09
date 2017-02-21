@@ -42,6 +42,7 @@ public abstract class UserServiceCommon implements UserService {
         Assert.notNull(email, "email must not be null");
         return checkNotFound(repository.getByEmail(email), "email=" + email);
     }
+
     @Cacheable("users")
     @Override
     public List<User> getAll() {

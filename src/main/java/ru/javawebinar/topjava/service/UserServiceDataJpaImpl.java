@@ -24,7 +24,7 @@ public class UserServiceDataJpaImpl extends UserServiceCommon {
     @Transactional(readOnly = true)
     public User get(int id){
         User usr = super.get(id);
-        usr.getMeals();
+        //usr.getMeals();
         return usr;
     }
 }

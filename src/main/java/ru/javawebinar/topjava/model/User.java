@@ -56,7 +56,7 @@ public class User extends NamedEntity {
     private int caloriesPerDay = MealsUtil.DEFAULT_CALORIES_PER_DAY;
 
     @OneToMany
-    @JoinColumn(name="user_id", referencedColumnName="id")
+    @CollectionTable(name="meals", joinColumns = @JoinColumn(name="user_id"))
     private List<Meal> meals;
 
     public User() {
