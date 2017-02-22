@@ -1,7 +1,11 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
@@ -15,6 +19,7 @@ import java.util.List;
  * 27.03.2015.
  */
 @Repository
+@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ)
 public class DataJpaMealRepositoryImpl implements MealRepository {
 
     @Autowired
@@ -25,6 +30,8 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
 
 
     @Override
+    @Modifying
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public Meal save(Meal meal, int userId) {
         Meal result = null;
         if (meal.isNew() || get(meal.getId(), userId)!=null) {
@@ -36,6 +43,8 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
     }
 
     @Override
+    @Modifying
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public boolean delete(int id, int userId) {
         boolean result = get(id, userId)!=null;
         if (result) {
