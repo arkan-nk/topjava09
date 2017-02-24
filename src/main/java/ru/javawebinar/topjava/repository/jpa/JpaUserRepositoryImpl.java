@@ -2,6 +2,8 @@ package ru.javawebinar.topjava.repository.jpa;
 
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
@@ -15,7 +17,7 @@ import java.util.List;
  * Date: 29.08.2014
  */
 @Repository
-@Transactional(readOnly = true)
+@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ)
 public class JpaUserRepositoryImpl implements UserRepository {
 
 /*
@@ -31,7 +33,7 @@ public class JpaUserRepositoryImpl implements UserRepository {
     private EntityManager em;
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public User save(User user) {
         if (user.isNew()) {
             em.persist(user);
@@ -47,7 +49,7 @@ public class JpaUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public boolean delete(int id) {
 
 /*      User ref = em.getReference(User.class, id);
